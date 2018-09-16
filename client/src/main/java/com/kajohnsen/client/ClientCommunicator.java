@@ -1,5 +1,7 @@
 package com.kajohnsen.client;
 
+import com.kajohnsen.shared.CommandData;
+import com.kajohnsen.shared.CommandType;
 import com.kajohnsen.shared.Results;
 
 import java.io.IOException;
@@ -36,8 +38,7 @@ class ClientCommunicator {
             reqBody.close();
 
             InputStream respBody = http.getInputStream();
-            String respData = readString(respBody);
-            results = Serializer.deserializeResults(respData);
+            results = Serializer.deserializeResults(respBody);
             System.out.println(String.format("Received result from server"));
         }
         catch (IOException e) {
@@ -46,5 +47,29 @@ class ClientCommunicator {
         }
 
         return results;
+    }
+
+    Results send(CommandData commandData) {
+        Results results = null;
+        try {
+            String methodId = "";URL url = new URL("http://" + HOST + ":" + PORT + "/execCommand");
+            HttpURLConnection http = (HttpURLConnection)url.openConnection();
+            http.setDoOutput(true);
+            http.connect();
+            OutputStream reqBody = http.getOutputStream();
+            Serializer.serializeCommandData(commandData, reqBody);
+            reqBody.close();
+
+            InputStream respBody = http.getInputStream();
+            results = Serializer.deserializeResults(respBody);
+            System.out.println(String.format("Received result from server"));
+        }
+        catch (IOException e) {
+            // An exception was thrown, so display the exception's stack trace
+            e.printStackTrace();
+        }
+
+        return results;
+
     }
 }

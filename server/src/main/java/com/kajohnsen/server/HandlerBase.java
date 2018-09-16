@@ -31,10 +31,11 @@ public abstract class HandlerBase implements HttpHandler {
             errorInfo = e.getMessage();
         }
         Results results = new Results(success, data, errorInfo);
-        String serResults = Serializer.serializeResults(results);
         httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+//        String serResults = Serializer.serializeResults(results);
         OutputStream os = httpExchange.getResponseBody();
-        writeString(serResults, os);
+        Serializer.serializeResults(results, os);
+//        writeString(serResults, os);
         os.close();
     }
 

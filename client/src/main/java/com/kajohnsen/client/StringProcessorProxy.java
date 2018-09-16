@@ -49,7 +49,7 @@ class StringProcessorProxy implements IStringProcessor {
     public Double parseDouble(String s){
         Double result = null;
         try {
-            result =  (Double) processString(s, "parseDouble");
+            result = (Double) processString(s, "parseDouble");
         } catch (ServerException e) {
             e.printStackTrace();
         }
