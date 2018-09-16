@@ -13,6 +13,18 @@ public class Results implements Serializable {
         this.errorInfo = errorInfo;
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public String getErrorInfo() {
+        return errorInfo;
+    }
+
     public Results(boolean success, Object data) {
         this.success = success;
         this.data = data;

@@ -11,6 +11,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
+import static com.kajohnsen.shared.StreamStringer.readString;
+import static com.kajohnsen.shared.StreamStringer.writeString;
+
 public abstract class HandlerBase implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -31,22 +34,10 @@ public abstract class HandlerBase implements HttpHandler {
         String serResults = Serializer.serializeResults(results);
         httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
         OutputStream os = httpExchange.getResponseBody();
-        OutputStreamWriter outputWriter = new OutputStreamWriter(os);
-        outputWriter.write(serResults);
+        writeString(serResults, os);
         os.close();
     }
 
     protected abstract Object processString(String requestString);
-
-    private String readString(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        InputStreamReader sr = new InputStreamReader(is);
-        char[] buf = new char[1024];
-        int len;
-        while ((len = sr.read(buf)) > 0) {
-            sb.append(buf, 0, len);
-        }
-        return sb.toString();
-    }
 
 }
